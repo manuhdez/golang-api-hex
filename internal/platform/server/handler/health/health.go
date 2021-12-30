@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func CheckHealthHandler() gin.HandlerFunc {
+func CheckHandler() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		context.JSON(http.StatusOK, gin.H{
 			"status": "ok",

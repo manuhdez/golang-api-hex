@@ -1,6 +1,7 @@
 package server
 
 import (
+	"codelytv-api/internal/platform/server/handler/courses"
 	"codelytv-api/internal/platform/server/handler/health"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -27,5 +28,6 @@ func (s *Server) Run() error {
 }
 
 func (s *Server) registerRoutes() {
-	s.engine.GET("/health", health.CheckHealthHandler())
+	s.engine.GET("/health", health.CheckHandler())
+	s.engine.POST("/courses", courses.CreateHandler())
 }
