@@ -1,6 +1,7 @@
 package courses
 
 import (
+	mooc "codelytv-api/internal"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -11,7 +12,7 @@ type createCourseRequest struct {
 	Duration string `json:"duration" binding:"required"`
 }
 
-func CreateHandler() gin.HandlerFunc {
+func CreateHandler(repository mooc.CourseRepository) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var req createCourseRequest
 		if err := context.BindJSON(&req); err != nil {
@@ -19,7 +20,13 @@ func CreateHandler() gin.HandlerFunc {
 			return
 		}
 
-		//course := mooc.NewCourse(req.ID, req.Name, req.Duration)
+		course := mooc.NewCourse(req.ID, req.Name, req.Duration)
+		error := repository.Save(context, course)
+		if error != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"error": error.Error()})
+			return
+		}
+
 		context.JSON(http.StatusCreated, gin.H{"message": "Course created successfully"})
 	}
 }
