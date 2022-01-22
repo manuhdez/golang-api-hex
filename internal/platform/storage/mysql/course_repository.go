@@ -4,6 +4,8 @@ import (
 	mooc "codelytv-api/internal"
 	"context"
 	"database/sql"
+	"fmt"
+	"github.com/huandu/go-sqlbuilder"
 )
 
 type CourseRepository struct {
@@ -17,20 +19,18 @@ func NewCourseRepository(db *sql.DB) *CourseRepository {
 }
 
 func (r *CourseRepository) Save(ctx context.Context, course mooc.Course) error {
-	query := "INSERT INTO courses (id, name, duration) VALUES (?, ?, ?)"
+	sqlCourseStruct := sqlbuilder.NewStruct(new(sqlCourse))
 
-	stmt, err := r.db.Prepare(query)
+	query, args := sqlCourseStruct.InsertInto(sqlCourseTable, sqlCourse{
+		ID:       course.ID(),
+		Name:     course.Name(),
+		Duration: course.Duration(),
+	}).Build()
+
+	_, err := r.db.ExecContext(ctx, query, args...)
 	if err != nil {
-		return err
+		return fmt.Errorf("error trying to persist course: %v", err)
 	}
 
-	defer stmt.Close()
-
-	_, err = stmt.Exec(
-		course.ID(),
-		course.Name(),
-		course.Duration(),
-	)
-
-	return err
+	return nil
 }
