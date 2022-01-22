@@ -21,9 +21,8 @@ func CreateHandler(repository mooc.CourseRepository) gin.HandlerFunc {
 		}
 
 		course := mooc.NewCourse(req.ID, req.Name, req.Duration)
-		error := repository.Save(context, course)
-		if error != nil {
-			context.JSON(http.StatusInternalServerError, gin.H{"error": error.Error()})
+		if err := repository.Save(context, course); err != nil {
+			context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 

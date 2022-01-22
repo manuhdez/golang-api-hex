@@ -2,31 +2,24 @@ package bootstrap
 
 import (
 	"codelytv-api/internal/platform/server"
-	"database/sql"
-	"fmt"
+	"codelytv-api/internal/platform/storage/mysql"
 )
 
 const (
-	host   = "localhost"
-	port   = 8080
-	dbUser = "root"
-	dbPass = "root"
-	dbHost = "localhost"
-	dbPort = 3306
-	dbName = "codely"
+	host = "0.0.0.0"
+	port = 8080
 )
 
 func Run() error {
-	dbUri := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8", dbUser, dbPass, dbHost, dbPort, dbName)
-	db, err := sql.Open("mysql", dbUri)
+	db, err := mysql.Connect()
 	if err != nil {
-		println("cannot connect to db", error.Error())
+		println("cannot connect to db", err.Error())
 		return err
 	}
 
 	// instantiate dependencies for route handlers
-	// courseRepository := mysql.NewCourseRepository(db)
+	courseRepository := mysql.NewCourseRepository(db)
 
-	srv := server.New(host, port)
+	srv := server.New(host, port, courseRepository)
 	return srv.Run()
 }
