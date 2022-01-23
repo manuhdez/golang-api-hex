@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	mooc "codelytv-api/internal"
+	mooc "codelytv-api/internal/mooc"
 	"context"
 	"database/sql"
 	"fmt"
@@ -21,10 +21,16 @@ func NewCourseRepository(db *sql.DB) *CourseRepository {
 func (r *CourseRepository) Save(ctx context.Context, course mooc.Course) error {
 	sqlCourseStruct := sqlbuilder.NewStruct(new(sqlCourse))
 
+	var (
+		id       = course.ID()
+		name     = course.Name()
+		duration = course.Duration()
+	)
+
 	query, args := sqlCourseStruct.InsertInto(sqlCourseTable, sqlCourse{
-		ID:       course.ID(),
-		Name:     course.Name(),
-		Duration: course.Duration(),
+		ID:       id.Value(),
+		Name:     name.Value(),
+		Duration: duration.Value(),
 	}).Build()
 
 	_, err := r.db.ExecContext(ctx, query, args...)

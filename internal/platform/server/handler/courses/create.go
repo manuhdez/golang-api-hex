@@ -1,7 +1,7 @@
 package courses
 
 import (
-	mooc "codelytv-api/internal"
+	"codelytv-api/internal/mooc"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -20,7 +20,11 @@ func CreateHandler(repository mooc.CourseRepository) gin.HandlerFunc {
 			return
 		}
 
-		course := mooc.NewCourse(req.ID, req.Name, req.Duration)
+		course, err := mooc.NewCourse(req.ID, req.Name, req.Duration)
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+
 		if err := repository.Save(context, course); err != nil {
 			context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

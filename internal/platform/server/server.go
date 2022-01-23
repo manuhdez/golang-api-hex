@@ -1,7 +1,7 @@
 package server
 
 import (
-	mooc "codelytv-api/internal"
+	"codelytv-api/internal/mooc"
 	"codelytv-api/internal/platform/server/handler/courses"
 	"codelytv-api/internal/platform/server/handler/health"
 	"fmt"
