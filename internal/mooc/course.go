@@ -6,9 +6,11 @@ import (
 
 type CourseRepository interface {
 	Save(ctx context.Context, course Course) error
+	All(ctx context.Context) ([]Course, error)
+	Find(ctx context.Context, id CourseID) (Course, error)
 }
 
-//go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=CourseRepository
+//go:generate mockery --case=snake --outpkg=storagemocks --output=../platform/storage/storagemocks --name=CourseRepository
 
 type Course struct {
 	id       CourseID
@@ -49,4 +51,12 @@ func (c *Course) Name() CourseName {
 // Duration returns the course duration
 func (c *Course) Duration() CourseDuration {
 	return c.duration
+}
+
+func (c *Course) ToPrimitives() map[string]string {
+	return map[string]string{
+		"id":       c.id.Value(),
+		"name":     c.name.Value(),
+		"duration": c.duration.Value(),
+	}
 }
