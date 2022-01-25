@@ -13,14 +13,16 @@ type Server struct {
 	engine   *gin.Engine
 
 	createCourseService course.CreateService
+	findCourseService   course.FindService
 }
 
-func New(host string, port uint, createCourseService course.CreateService) Server {
+func New(host string, port uint, createCourseService course.CreateService, findCourseService course.FindService) Server {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
 		createCourseService: createCourseService,
+		findCourseService:   findCourseService,
 	}
 
 	srv.registerRoutes()
@@ -36,5 +38,5 @@ func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
 	//s.engine.GET(courses.CoursesPath, courses.GetHandler(s.courseRepository))
 	s.engine.POST(courses.CoursesPath, courses.CreateHandler(s.createCourseService))
-	//s.engine.GET(fmt.Sprintf("%s/:id", courses.CoursesPath), courses.FindHandler(s.courseRepository))
+	s.engine.GET(fmt.Sprintf("%s/:id", courses.CoursesPath), courses.FindHandler(s.findCourseService))
 }

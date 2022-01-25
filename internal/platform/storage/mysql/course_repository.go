@@ -4,6 +4,7 @@ import (
 	"codelytv-api/internal/mooc"
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/huandu/go-sqlbuilder"
 )
@@ -67,6 +68,8 @@ func (r *CourseRepository) All(ctx context.Context) ([]mooc.Course, error) {
 	return courses, nil
 }
 
+var NotFoundError = errors.New("could not the a course")
+
 func (r *CourseRepository) Find(ctx context.Context, id mooc.CourseID) (mooc.Course, error) {
 	qb := sqlbuilder.Select("*").From(sqlCourseTable)
 	qb.Where(qb.Equal("id", id.Value()))
@@ -75,7 +78,7 @@ func (r *CourseRepository) Find(ctx context.Context, id mooc.CourseID) (mooc.Cou
 	rows, err := r.db.QueryContext(ctx, query, args...)
 
 	if rows.Next() == false {
-		return mooc.Course{}, fmt.Errorf("could not find a course with id: %s", id.Value())
+		return mooc.Course{}, fmt.Errorf("%w with id: %s", NotFoundError, id.Value())
 	}
 
 	var course sqlCourse

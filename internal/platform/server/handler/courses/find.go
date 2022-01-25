@@ -1,26 +1,32 @@
 package courses
 
 import (
+	"codelytv-api/internal/application/course"
 	"codelytv-api/internal/mooc"
+	"codelytv-api/internal/platform/storage/mysql"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func FindHandler(repository mooc.CourseRepository) gin.HandlerFunc {
+func FindHandler(finder course.FindService) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		id := context.Param("id")
-		courseID, err := mooc.NewCourseID(id)
-		if err != nil {
-			context.JSON(http.StatusBadRequest, err.Error())
-			return
-		}
 
-		course, err := repository.Find(context, courseID)
+		response, err := finder.Find(context, id)
 		if err != nil {
+			switch {
+			case errors.Is(err, mooc.InvalidUUIDError):
+				context.JSON(http.StatusBadRequest, err.Error())
+				return
+			case errors.Is(err, mysql.NotFoundError):
+				context.JSON(http.StatusNotFound, err.Error())
+				return
+			}
 			context.JSON(http.StatusInternalServerError, err.Error())
 			return
 		}
 
-		context.JSON(http.StatusOK, course.ToPrimitives())
+		context.JSON(http.StatusOK, response.ToPrimitives())
 	}
 }

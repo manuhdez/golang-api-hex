@@ -23,9 +23,9 @@ func Run() error {
 
 	// instantiate application services
 	createCourseService := course.NewCreateService(courseRepository)
+	findCourseService := course.NewFindService(courseRepository)
 	// getCoursesService := course.NewGetCoursesService(courseRepository)
-	// findCourseService := course.NewFindCourseService(courseRepository)
 
-	srv := server.New(host, port, createCourseService)
+	srv := server.New(host, port, createCourseService, findCourseService)
 	return srv.Run()
 }
