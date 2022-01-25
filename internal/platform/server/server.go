@@ -1,7 +1,7 @@
 package server
 
 import (
-	"codelytv-api/internal/mooc"
+	"codelytv-api/internal/application/course"
 	"codelytv-api/internal/platform/server/handler/courses"
 	"codelytv-api/internal/platform/server/handler/health"
 	"fmt"
@@ -12,15 +12,15 @@ type Server struct {
 	httpAddr string
 	engine   *gin.Engine
 
-	courseRepository mooc.CourseRepository
+	createCourseService course.CreateService
 }
 
-func New(host string, port uint, courseRepository mooc.CourseRepository) Server {
+func New(host string, port uint, createCourseService course.CreateService) Server {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
-		courseRepository: courseRepository,
+		createCourseService: createCourseService,
 	}
 
 	srv.registerRoutes()
@@ -34,7 +34,7 @@ func (s *Server) Run() error {
 
 func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
-	s.engine.GET(courses.CoursesPath, courses.GetHandler(s.courseRepository))
-	s.engine.POST(courses.CoursesPath, courses.CreateHandler(s.courseRepository))
-	s.engine.GET(fmt.Sprintf("%s/:id", courses.CoursesPath), courses.FindHandler(s.courseRepository))
+	//s.engine.GET(courses.CoursesPath, courses.GetHandler(s.courseRepository))
+	s.engine.POST(courses.CoursesPath, courses.CreateHandler(s.createCourseService))
+	//s.engine.GET(fmt.Sprintf("%s/:id", courses.CoursesPath), courses.FindHandler(s.courseRepository))
 }

@@ -1,7 +1,9 @@
 package courses
 
 import (
+	"codelytv-api/internal/application/course"
 	"codelytv-api/internal/mooc"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -12,7 +14,7 @@ type createCourseRequest struct {
 	Duration string `json:"duration" binding:"required"`
 }
 
-func CreateHandler(repository mooc.CourseRepository) gin.HandlerFunc {
+func CreateHandler(service course.CreateService) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var req createCourseRequest
 		if err := context.BindJSON(&req); err != nil {
@@ -20,17 +22,26 @@ func CreateHandler(repository mooc.CourseRepository) gin.HandlerFunc {
 			return
 		}
 
-		course, err := mooc.NewCourse(req.ID, req.Name, req.Duration)
+		err := service.Create(context, req.ID, req.Name, req.Duration)
 		if err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
+			handleError(context, err)
 		}
 
-		if err := repository.Save(context, course); err != nil {
-			context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+		context.Status(http.StatusCreated)
+	}
+}
 
-		context.JSON(http.StatusCreated, gin.H{"message": "Course created successfully"})
+func handleError(ctx *gin.Context, err error) {
+	switch {
+	case errors.Is(err, mooc.InvalidUUIDError),
+		errors.Is(err, mooc.LongCourseNameError),
+		errors.Is(err, mooc.ShortCourseNameError),
+		errors.Is(err, mooc.EmptyCourseDurationError):
+
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+
+	default:
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 }

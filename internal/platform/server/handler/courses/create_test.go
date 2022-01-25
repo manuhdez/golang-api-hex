@@ -2,6 +2,7 @@ package courses
 
 import (
 	"bytes"
+	"codelytv-api/internal/application/course"
 	"codelytv-api/internal/platform/storage/storagemocks"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
@@ -17,11 +18,12 @@ func TestCreateHandler(t *testing.T) {
 	// generate the mock instance of our repository and define the expected behaviour
 	courseRepository := new(storagemocks.CourseRepository)
 	courseRepository.On("Save", mock.Anything, mock.Anything).Return(nil)
+	createCourseService := course.NewCreateService(courseRepository)
 
 	// generate a gin test instance and register the endpoints to test
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
-	r.POST(CoursesPath, CreateHandler(courseRepository))
+	r.POST(CoursesPath, CreateHandler(createCourseService))
 
 	t.Run("given an invalid request it return 400 status", func(t *testing.T) {
 		body := getJsonBody(t, createCourseRequest{

@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"codelytv-api/internal/application/course"
 	"codelytv-api/internal/platform/server"
 	"codelytv-api/internal/platform/storage/mysql"
 )
@@ -17,9 +18,14 @@ func Run() error {
 		return err
 	}
 
-	// instantiate dependencies for route handlers
+	// instantiate repositories
 	courseRepository := mysql.NewCourseRepository(db)
 
-	srv := server.New(host, port, courseRepository)
+	// instantiate application services
+	createCourseService := course.NewCreateService(courseRepository)
+	// getCoursesService := course.NewGetCoursesService(courseRepository)
+	// findCourseService := course.NewFindCourseService(courseRepository)
+
+	srv := server.New(host, port, createCourseService)
 	return srv.Run()
 }
