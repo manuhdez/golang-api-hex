@@ -1,21 +1,21 @@
-package course
+package application
 
 import (
 	"codelytv-api/internal/mooc"
 	"context"
 )
 
-type FindService struct {
+type FindCourseService struct {
 	repository mooc.CourseRepository
 }
 
-func NewFindService(repo mooc.CourseRepository) FindService {
-	return FindService{
+func NewFindCourseService(repo mooc.CourseRepository) FindCourseService {
+	return FindCourseService{
 		repository: repo,
 	}
 }
 
-func (finder *FindService) Find(context context.Context, id string) (mooc.Course, error) {
+func (finder *FindCourseService) Find(context context.Context, id string) (mooc.Course, error) {
 	courseID, err := mooc.NewCourseID(id)
 	if err != nil {
 		return mooc.Course{}, err

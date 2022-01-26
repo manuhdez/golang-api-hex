@@ -18,7 +18,7 @@ func TestCreateHandler(t *testing.T) {
 	// generate the mock instance of our repository and define the expected behaviour
 	courseRepository := new(storagemocks.CourseRepository)
 	courseRepository.On("Save", mock.Anything, mock.Anything).Return(nil)
-	createCourseService := course.NewCreateService(courseRepository)
+	createCourseService := application.NewCreateCourseService(courseRepository)
 
 	// generate a gin test instance and register the endpoints to test
 	gin.SetMode(gin.TestMode)

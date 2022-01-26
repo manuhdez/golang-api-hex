@@ -14,7 +14,7 @@ type createCourseRequest struct {
 	Duration string `json:"duration" binding:"required"`
 }
 
-func CreateHandler(service course.CreateService) gin.HandlerFunc {
+func CreateHandler(service application.CreateCourseService) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var req createCourseRequest
 		if err := context.BindJSON(&req); err != nil {

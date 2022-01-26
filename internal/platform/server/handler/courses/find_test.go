@@ -29,7 +29,7 @@ func TestFindHandler(t *testing.T) {
 
 	courseRepository := new(storagemocks.CourseRepository)
 	courseRepository.On("Find", mock.Anything, courseID).Return(course, nil)
-	findCourseService := course2.NewFindService(courseRepository)
+	findCourseService := course2.NewFindCourseService(courseRepository)
 
 	gin.SetMode(gin.TestMode)
 	server := gin.New()
@@ -69,7 +69,7 @@ func TestFindHandlerCourseNotFound(t *testing.T) {
 
 	courseRepository := new(storagemocks.CourseRepository)
 	courseRepository.On("Find", mock.Anything, courseID).Return(mooc.Course{}, mysql.NotFoundError)
-	findCourseService := course2.NewFindService(courseRepository)
+	findCourseService := course2.NewFindCourseService(courseRepository)
 
 	gin.SetMode(gin.TestMode)
 	server := gin.New()

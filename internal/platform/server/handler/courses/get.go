@@ -1,14 +1,15 @@
 package courses
 
 import (
+	"codelytv-api/internal/application/course"
 	"codelytv-api/internal/mooc"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func GetHandler(repository mooc.CourseRepository) gin.HandlerFunc {
+func GetHandler(service application.GetCoursesService) gin.HandlerFunc {
 	return func(context *gin.Context) {
-		courses, err := repository.All(context)
+		courses, err := service.Get(context)
 		if err != nil {
 			context.JSON(http.StatusInternalServerError, err.Error())
 		}

@@ -22,10 +22,10 @@ func Run() error {
 	courseRepository := mysql.NewCourseRepository(db)
 
 	// instantiate application services
-	createCourseService := course.NewCreateService(courseRepository)
-	findCourseService := course.NewFindService(courseRepository)
-	// getCoursesService := course.NewGetCoursesService(courseRepository)
+	createCourseService := application.NewCreateCourseService(courseRepository)
+	findCourseService := application.NewFindCourseService(courseRepository)
+	getCoursesService := application.NewGetCoursesService(courseRepository)
 
-	srv := server.New(host, port, createCourseService, findCourseService)
+	srv := server.New(host, port, createCourseService, findCourseService, getCoursesService)
 	return srv.Run()
 }

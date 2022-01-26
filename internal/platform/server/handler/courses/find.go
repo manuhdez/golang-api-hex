@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func FindHandler(finder course.FindService) gin.HandlerFunc {
+func FindHandler(finder application.FindCourseService) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		id := context.Param("id")
 

@@ -1,19 +1,19 @@
-package course
+package application
 
 import (
 	"codelytv-api/internal/mooc"
 	"context"
 )
 
-type CreateService struct {
+type CreateCourseService struct {
 	repository mooc.CourseRepository
 }
 
-func NewCreateService(repository mooc.CourseRepository) CreateService {
-	return CreateService{repository: repository}
+func NewCreateCourseService(repository mooc.CourseRepository) CreateCourseService {
+	return CreateCourseService{repository: repository}
 }
 
-func (service *CreateService) Create(ctx context.Context, id, name, duration string) error {
+func (service *CreateCourseService) Create(ctx context.Context, id, name, duration string) error {
 	course, err := mooc.NewCourse(id, name, duration)
 	if err != nil {
 		return err
