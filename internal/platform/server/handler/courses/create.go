@@ -1,8 +1,9 @@
 package courses
 
 import (
-	"codelytv-api/internal/application/course"
+	"codelytv-api/internal/application/course/create"
 	"codelytv-api/internal/mooc"
+	"codelytv-api/kit/command"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -14,7 +15,7 @@ type createCourseRequest struct {
 	Duration string `json:"duration" binding:"required"`
 }
 
-func CreateHandler(service application.CreateCourseService) gin.HandlerFunc {
+func CreateHandler(bus command.Bus) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var req createCourseRequest
 		if err := context.BindJSON(&req); err != nil {
@@ -22,7 +23,7 @@ func CreateHandler(service application.CreateCourseService) gin.HandlerFunc {
 			return
 		}
 
-		err := service.Create(context, req.ID, req.Name, req.Duration)
+		err := bus.Dispatch(context, create.NewCourseCommand(req.ID, req.Name, req.Duration))
 		if err != nil {
 			handleError(context, err)
 		}

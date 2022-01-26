@@ -4,6 +4,7 @@ import (
 	"codelytv-api/internal/application/course"
 	"codelytv-api/internal/platform/server/handler/courses"
 	"codelytv-api/internal/platform/server/handler/health"
+	"codelytv-api/kit/command"
 	"fmt"
 	"github.com/gin-gonic/gin"
 )
@@ -12,19 +13,19 @@ type Server struct {
 	httpAddr string
 	engine   *gin.Engine
 
-	createCourseService application.CreateCourseService
-	findCourseService   application.FindCourseService
-	getCoursesService   application.GetCoursesService
+	cmdBus            command.Bus
+	findCourseService application.FindCourseService
+	getCoursesService application.GetCoursesService
 }
 
-func New(host string, port uint, createCourseService application.CreateCourseService, findCourseService application.FindCourseService, getCoursesService application.GetCoursesService) Server {
+func New(host string, port uint, cmdBus command.Bus, findCourseService application.FindCourseService, getCoursesService application.GetCoursesService) Server {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
-		createCourseService: createCourseService,
-		findCourseService:   findCourseService,
-		getCoursesService:   getCoursesService,
+		cmdBus:            cmdBus,
+		findCourseService: findCourseService,
+		getCoursesService: getCoursesService,
 	}
 
 	srv.registerRoutes()
@@ -39,6 +40,6 @@ func (s *Server) Run() error {
 func (s *Server) registerRoutes() {
 	s.engine.GET("/health", health.CheckHandler())
 	s.engine.GET(courses.CoursesPath, courses.GetHandler(s.getCoursesService))
-	s.engine.POST(courses.CoursesPath, courses.CreateHandler(s.createCourseService))
+	s.engine.POST(courses.CoursesPath, courses.CreateHandler(s.cmdBus))
 	s.engine.GET(fmt.Sprintf("%s/:id", courses.CoursesPath), courses.FindHandler(s.findCourseService))
 }
