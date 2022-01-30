@@ -1,5 +1,6 @@
 up:
 	@docker compose up -d
+.PHONY: build
 build:
 	@docker compose build --no-cache
 down:
