@@ -7,6 +7,7 @@ import (
 	"codelytv-api/internal/platform/config"
 	"codelytv-api/internal/platform/server"
 	"codelytv-api/internal/platform/storage/mysql"
+	"context"
 )
 
 func Run() error {
@@ -34,6 +35,6 @@ func Run() error {
 	createCourseHandler := create.NewCourseCommandHandler(createCourseService)
 	commandBus.Register(create.CourseCommandType, createCourseHandler)
 
-	srv := server.New(env.App.Host, env.App.Port, commandBus, findCourseService, getCoursesService)
-	return srv.Run()
+	ctx, srv := server.New(context.Background(), env.App.Host, env.App.Port, commandBus, findCourseService, getCoursesService)
+	return srv.Run(ctx)
 }

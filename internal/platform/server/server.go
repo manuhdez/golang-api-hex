@@ -5,8 +5,14 @@ import (
 	"codelytv-api/internal/platform/server/handler/courses"
 	"codelytv-api/internal/platform/server/handler/health"
 	"codelytv-api/kit/command"
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"time"
 )
 
 type Server struct {
@@ -18,7 +24,7 @@ type Server struct {
 	getCoursesService application.GetCoursesService
 }
 
-func New(host string, port uint, cmdBus command.Bus, findCourseService application.FindCourseService, getCoursesService application.GetCoursesService) Server {
+func New(ctx context.Context, host string, port uint, cmdBus command.Bus, findCourseService application.FindCourseService, getCoursesService application.GetCoursesService) (context.Context, Server) {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
@@ -29,12 +35,29 @@ func New(host string, port uint, cmdBus command.Bus, findCourseService applicati
 	}
 
 	srv.registerRoutes()
-	return srv
+	return serverContext(ctx), srv
 }
 
-func (s *Server) Run() error {
+func (s *Server) Run(ctx context.Context) error {
 	println("Server running on: " + s.httpAddr)
-	return s.engine.Run(s.httpAddr)
+
+	server := &http.Server{
+		Addr:    s.httpAddr,
+		Handler: s.engine,
+	}
+
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatal("Server error: ", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	ctxShutdown, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	return server.Shutdown(ctxShutdown)
 }
 
 func (s *Server) registerRoutes() {
@@ -42,4 +65,15 @@ func (s *Server) registerRoutes() {
 	s.engine.GET(courses.CoursesPath, courses.GetHandler(s.getCoursesService))
 	s.engine.POST(courses.CoursesPath, courses.CreateHandler(s.cmdBus))
 	s.engine.GET(fmt.Sprintf("%s/:id", courses.CoursesPath), courses.FindHandler(s.findCourseService))
+}
+
+func serverContext(ctx context.Context) context.Context {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	ctx, cancel := context.WithCancel(ctx)
+	go func() {
+		<-c
+		cancel()
+	}()
+	return ctx
 }
