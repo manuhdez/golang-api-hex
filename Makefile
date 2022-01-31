@@ -10,3 +10,11 @@ start:
 
 test:
 	go test ./...
+
+deps:
+	go mod download
+	go mod verify
+	@make tidy
+
+tidy:
+	go mod tidy
