@@ -24,12 +24,15 @@ func (bus CommandBus) Dispatch(ctx context.Context, cmd command.Command) error {
 		return nil
 	}
 
+	hasError := make(chan error)
 	go func() {
 		err := handler.Handle(ctx, cmd)
 		if err != nil {
 			log.Printf("Error while handling %s - %s\n", cmd.Type(), err)
+			hasError <- err
 		}
+		hasError <- nil
 	}()
 
-	return nil
+	return <-hasError
 }
