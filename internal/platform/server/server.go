@@ -26,7 +26,7 @@ type Server struct {
 
 func New(ctx context.Context, host string, port uint, cmdBus command.Bus, findCourseService application.FindCourseService, getCoursesService application.GetCoursesService) (context.Context, Server) {
 	srv := Server{
-		engine:   gin.New(),
+		engine:   gin.Default(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
 		cmdBus:            cmdBus,
