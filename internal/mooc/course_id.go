@@ -21,6 +21,6 @@ func NewCourseID(value string) (CourseID, error) {
 	return CourseID{value: id.String()}, nil
 }
 
-func (cid *CourseID) Value() string {
+func (cid CourseID) Value() string {
 	return cid.value
 }

@@ -27,6 +27,6 @@ func NewCourseName(value string) (CourseName, error) {
 	return CourseName{value: value}, nil
 }
 
-func (cn *CourseName) Value() string {
+func (cn CourseName) Value() string {
 	return cn.value
 }

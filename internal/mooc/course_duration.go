@@ -19,6 +19,6 @@ func NewCourseDuration(value string) (CourseDuration, error) {
 	return CourseDuration{value: value}, nil
 }
 
-func (cd *CourseDuration) Value() string {
+func (cd CourseDuration) Value() string {
 	return cd.value
 }
