@@ -8,6 +8,7 @@ import (
 	"codelytv-api/internal/platform/server"
 	"codelytv-api/internal/platform/storage/mysql"
 	"context"
+	"time"
 )
 
 func Run() error {
@@ -24,7 +25,7 @@ func Run() error {
 	)
 
 	// instantiate repositories
-	courseRepository := mysql.NewCourseRepository(db)
+	courseRepository := mysql.NewCourseRepository(db, 5*time.Second)
 
 	// instantiate application services
 	createCourseService := create.NewCreateCourseService(courseRepository)

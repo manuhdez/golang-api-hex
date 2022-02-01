@@ -7,32 +7,32 @@ import (
 	"errors"
 	"fmt"
 	"github.com/huandu/go-sqlbuilder"
+	"time"
 )
 
 type CourseRepository struct {
-	db *sql.DB
+	db      *sql.DB
+	timeout time.Duration
 }
 
-func NewCourseRepository(db *sql.DB) *CourseRepository {
+func NewCourseRepository(db *sql.DB, timeout time.Duration) *CourseRepository {
 	return &CourseRepository{
-		db: db,
+		db:      db,
+		timeout: timeout,
 	}
 }
 
 var courseStruct = sqlbuilder.NewStruct(new(sqlCourse))
 
 func (r *CourseRepository) Save(ctx context.Context, course mooc.Course) error {
-	var (
-		id       = course.ID()
-		name     = course.Name()
-		duration = course.Duration()
-	)
-
 	query, args := courseStruct.InsertInto(sqlCourseTable, sqlCourse{
-		ID:       id.Value(),
-		Name:     name.Value(),
-		Duration: duration.Value(),
+		ID:       course.ID().Value(),
+		Name:     course.Name().Value(),
+		Duration: course.Duration().Value(),
 	}).Build()
+
+	ctx, cancel := context.WithTimeout(ctx, r.timeout)
+	defer cancel()
 
 	_, err := r.db.ExecContext(ctx, query, args...)
 	if err != nil {
