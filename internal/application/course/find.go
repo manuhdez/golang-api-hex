@@ -1,8 +1,9 @@
 package application
 
 import (
-	"codelytv-api/internal/mooc"
 	"context"
+
+	"github.com/manuhdez/golang-api-hex/internal/mooc"
 )
 
 type FindCourseService struct {

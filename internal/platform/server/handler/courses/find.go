@@ -1,12 +1,13 @@
 package courses
 
 import (
-	"codelytv-api/internal/application/course"
-	"codelytv-api/internal/mooc"
-	"codelytv-api/internal/platform/storage/mysql"
 	"errors"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	application "github.com/manuhdez/golang-api-hex/internal/application/course"
+	"github.com/manuhdez/golang-api-hex/internal/mooc"
+	"github.com/manuhdez/golang-api-hex/internal/platform/storage/mysql"
 )
 
 func FindHandler(finder application.FindCourseService) gin.HandlerFunc {

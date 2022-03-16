@@ -1,8 +1,9 @@
 package main
 
 import (
-	"codelytv-api/cmd/api/bootstrap"
 	"log"
+
+	"github.com/manuhdez/golang-api-hex/cmd/api/bootstrap"
 )
 
 func main() {

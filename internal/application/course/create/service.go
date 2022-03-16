@@ -1,9 +1,10 @@
 package create
 
 import (
-	"codelytv-api/internal/mooc"
-	"codelytv-api/kit/event"
 	"context"
+
+	"github.com/manuhdez/golang-api-hex/internal/mooc"
+	"github.com/manuhdez/golang-api-hex/kit/event"
 )
 
 type CourseService struct {

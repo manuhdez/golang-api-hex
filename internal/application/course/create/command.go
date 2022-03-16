@@ -1,8 +1,9 @@
 package create
 
 import (
-	"codelytv-api/kit/command"
 	"context"
+
+	"github.com/manuhdez/golang-api-hex/kit/command"
 )
 
 // CourseCommandType Holds the value of the command type.

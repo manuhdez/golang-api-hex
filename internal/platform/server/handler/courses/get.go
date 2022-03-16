@@ -1,10 +1,11 @@
 package courses
 
 import (
-	"codelytv-api/internal/application/course"
-	"codelytv-api/internal/mooc"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	application "github.com/manuhdez/golang-api-hex/internal/application/course"
+	"github.com/manuhdez/golang-api-hex/internal/mooc"
 )
 
 func GetHandler(service application.GetCoursesService) gin.HandlerFunc {

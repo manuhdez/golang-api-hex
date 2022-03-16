@@ -1,6 +1,6 @@
 package mooc
 
-import "codelytv-api/kit/event"
+import "github.com/manuhdez/golang-api-hex/kit/event"
 
 const CourseCreatedEventType event.Type = "events.course.created"
 

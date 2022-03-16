@@ -1,9 +1,10 @@
 package inmemory
 
 import (
-	"codelytv-api/kit/command"
 	"context"
 	"log"
+
+	"github.com/manuhdez/golang-api-hex/kit/command"
 )
 
 type CommandBus struct {

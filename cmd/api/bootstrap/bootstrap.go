@@ -1,14 +1,15 @@
 package bootstrap
 
 import (
-	"codelytv-api/internal/application/course"
-	"codelytv-api/internal/application/course/create"
-	"codelytv-api/internal/platform/bus/inmemory"
-	"codelytv-api/internal/platform/config"
-	"codelytv-api/internal/platform/server"
-	"codelytv-api/internal/platform/storage/mysql"
 	"context"
 	"time"
+
+	application "github.com/manuhdez/golang-api-hex/internal/application/course"
+	"github.com/manuhdez/golang-api-hex/internal/application/course/create"
+	"github.com/manuhdez/golang-api-hex/internal/platform/bus/inmemory"
+	"github.com/manuhdez/golang-api-hex/internal/platform/config"
+	"github.com/manuhdez/golang-api-hex/internal/platform/server"
+	"github.com/manuhdez/golang-api-hex/internal/platform/storage/mysql"
 )
 
 func Run() error {

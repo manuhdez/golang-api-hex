@@ -1,18 +1,19 @@
 package server
 
 import (
-	"codelytv-api/internal/application/course"
-	"codelytv-api/internal/platform/server/handler/courses"
-	"codelytv-api/internal/platform/server/handler/health"
-	"codelytv-api/kit/command"
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	application "github.com/manuhdez/golang-api-hex/internal/application/course"
+	"github.com/manuhdez/golang-api-hex/internal/platform/server/handler/courses"
+	"github.com/manuhdez/golang-api-hex/internal/platform/server/handler/health"
+	"github.com/manuhdez/golang-api-hex/kit/command"
 )
 
 type Server struct {

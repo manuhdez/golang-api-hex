@@ -3,7 +3,7 @@
 package storagemocks
 
 import (
-	mooc "codelytv-api/internal/mooc"
+	mooc "github.com/manuhdez/golang-api-hex/internal/mooc"
 	context "context"
 
 	mock "github.com/stretchr/testify/mock"

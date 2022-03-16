@@ -1,12 +1,13 @@
 package courses
 
 import (
-	"codelytv-api/internal/application/course/create"
-	"codelytv-api/internal/mooc"
-	"codelytv-api/kit/command"
 	"errors"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/manuhdez/golang-api-hex/internal/application/course/create"
+	"github.com/manuhdez/golang-api-hex/internal/mooc"
+	"github.com/manuhdez/golang-api-hex/kit/command"
 )
 
 type createCourseRequest struct {

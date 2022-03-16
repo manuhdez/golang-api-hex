@@ -1,13 +1,14 @@
 package mysql
 
 import (
-	"codelytv-api/internal/mooc"
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/huandu/go-sqlbuilder"
 	"time"
+
+	"github.com/huandu/go-sqlbuilder"
+	"github.com/manuhdez/golang-api-hex/internal/mooc"
 )
 
 type CourseRepository struct {

@@ -2,18 +2,19 @@ package courses
 
 import (
 	"bytes"
-	course2 "codelytv-api/internal/application/course"
-	"codelytv-api/internal/mooc"
-	"codelytv-api/internal/platform/storage/mysql"
-	"codelytv-api/internal/platform/storage/storagemocks"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	course2 "github.com/manuhdez/golang-api-hex/internal/application/course"
+	"github.com/manuhdez/golang-api-hex/internal/mooc"
+	"github.com/manuhdez/golang-api-hex/internal/platform/storage/mysql"
+	"github.com/manuhdez/golang-api-hex/internal/platform/storage/storagemocks"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 var (

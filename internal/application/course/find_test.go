@@ -1,13 +1,14 @@
 package application
 
 import (
-	"codelytv-api/internal/mooc"
-	"codelytv-api/internal/platform/storage/storagemocks"
 	"context"
 	"errors"
+	"testing"
+
+	"github.com/manuhdez/golang-api-hex/internal/mooc"
+	"github.com/manuhdez/golang-api-hex/internal/platform/storage/storagemocks"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 var validCourseId = "571b4eca-89b4-4b75-868c-5b9c9ad79ed7"

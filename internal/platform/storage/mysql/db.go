@@ -1,10 +1,11 @@
 package mysql
 
 import (
-	"codelytv-api/internal/platform/config"
 	"database/sql"
 	"fmt"
+
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/manuhdez/golang-api-hex/internal/platform/config"
 )
 
 func Connect(dbConfig config.DbConfig) (*sql.DB, error) {
